@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alex Chen - Full Stack Developer | Matrix Interface</title>
+    <meta name="description" content="High-tech portfolio showcasing modern web development skills with a cyberpunk aesthetic.">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none !important;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: #000000;
+            color: #22c55e;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #000000;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(34, 197, 94, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(34, 197, 94, 0.7);
+        }
+
+        /* Selection */
+        ::selection {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        /* Grid Background */
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.2;
+            background-image: 
+                linear-gradient(rgba(34, 197, 94, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(34, 197, 94, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        .grid-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(34, 197, 94, 0.2) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(34, 197, 94, 0.2) 1px, transparent 1px);
+            background-size: 200px 200px;
+            opacity: 0.5;
+        }
+
+        /* Cursor Effects */
+        .cursor-glow {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(34, 197, 94, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s ease-out;
+        }
+
+        .cursor-secondary {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(34, 197, 94, 0.05) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.5s ease-out;
+        }
+
+        .cursor-crosshair {
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            width: 20px;
+            height: 20px;
+            transform: translate(-50%, -50%);
+            transition: all 0.2s ease-out;
+        }
+
+        .cursor-crosshair::before,
+        .cursor-crosshair::after {
+            content: '';
+            position: absolute;
+            background: rgba(34, 197, 94, 0.6);
+        }
+
+        .cursor-crosshair::before {
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            transform: translateY(-50%);
+        }
+
+        .cursor-crosshair::after {
+            left: 50%;
+            top: 0;
+            width: 1px;
+            height: 100%;
+            transform: translateX(-50%);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(34, 197, 94, 0.2);
+            z-index: 40;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+        }
+
+        .logo-icon {
+            width: 2rem;
+            height: 2rem;
+            border: 2px solid #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(34, 197, 94, 0.7);
+            text-decoration: none;
+            font-size: 0.875rem;
+            letter-spacing: 0.1em;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #22c55e;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: rgba(34, 197, 94, 0.7);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 5rem;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 4xl;
+        }
+
+        .boot-messages {
+            margin-bottom: 2rem;
+            font-size: 0.875rem;
+            color: rgba(34, 197, 94, 0.6);
+        }
+
+        .boot-messages div {
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.1em;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.25rem, 3vw, 2rem);
+            margin-bottom: 2rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .typing-cursor {
+            animation: blink 1s infinite;
+        }
+
+        .hero-description {
+            color: rgba(34, 197, 94, 0.8);
+            font-size: 1.125rem;
+            margin-bottom: 3rem;
+            max-width: 2xl;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        @media (min-width: 640px) {
+            .hero-buttons {
+                flex-direction: row;
+                justify-content: center;
+            }
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            letter-spacing: 0.1em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: transparent;
+            border: 2px solid #22c55e;
+            color: #22c55e;
+        }
+
+        .btn-primary:hover {
+            background: #22c55e;
+            color: #000000;
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(34, 197, 94, 0.1);
+            border: 2px solid rgba(34, 197, 94, 0.3);
+            color: #22c55e;
+        }
+
+        .btn-secondary:hover {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.2);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .social-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: rgba(34, 197, 94, 0.6);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .social-link:hover {
+            color: #22c55e;
+        }
+
+        .social-icon {
+            width: 3rem;
+            height: 3rem;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            background: rgba(34, 197, 94, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover .social-icon {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+            transform: scale(1.1);
+        }
+
+        /* Terminal Section */
+        .terminal-section {
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title h2 {
+            font-size: clamp(1.875rem, 4vw, 3rem);
+            margin-bottom: 1rem;
+            letter-spacing: 0.1em;
+        }
+
+        .section-title p {
+            color: rgba(34, 197, 94, 0.6);
+        }
+
+        .terminal {
+            max-width: 4xl;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .terminal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(34, 197, 94, 0.3);
+            background: rgba(34, 197, 94, 0.05);
+        }
+
+        .terminal-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .terminal-control {
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 50%;
+        }
+
+        .control-red { background: #ef4444; }
+        .control-yellow { background: #eab308; }
+        .control-green { background: #22c55e; }
+
+        .terminal-title {
+            font-size: 0.875rem;
+        }
+
+        .terminal-content {
+            padding: 1.5rem;
+            height: 24rem;
+            overflow-y: auto;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .terminal-line {
+            margin-bottom: 0.25rem;
+        }
+
+        /* Tech Stack Section */
+        .tech-stack {
+            padding: 5rem 0;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 6xl;
+            margin: 0 auto;
+        }
+
+        .tech-category {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .tech-category:hover {
+            border-color: #22c55e;
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.1);
+        }
+
+        .tech-category h3 {
+            font-size: 1.125rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(34, 197, 94, 0.3);
+            letter-spacing: 0.1em;
+        }
+
+        .tech-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .tech-name {
+            font-size: 0.875rem;
+            color: rgba(34, 197, 94, 0.8);
+        }
+
+        .tech-level {
+            font-size: 0.75rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 0.5rem;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #22c55e;
+            transition: width 1s ease-out;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+        }
+
+        /* Projects Section */
+        .projects {
+            padding: 5rem 0;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 6xl;
+            margin: 0 auto;
+        }
+
+        .project-card {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover {
+            border-color: #22c55e;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(34, 197, 94, 0.1);
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .project-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .project-status {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border: 1px solid;
+            background: rgba(34, 197, 94, 0.1);
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+
+        .project-description {
+            color: rgba(34, 197, 94, 0.8);
+            font-size: 0.875rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tech-tag {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .project-link {
+            padding: 0.5rem;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: rgba(34, 197, 94, 0.6);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .project-link:hover {
+            border-color: #22c55e;
+            color: #22c55e;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 5rem 0;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 3rem;
+            max-width: 4xl;
+            margin: 0 auto;
+        }
+
+        .contact-info {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            padding: 1.5rem;
+        }
+
+        .contact-form {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            padding: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.75rem;
+            color: rgba(34, 197, 94, 0.6);
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.1em;
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            background: #000000;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #22c55e;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            padding: 0.75rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #22c55e;
+        }
+
+        .form-textarea {
+            resize: none;
+            height: 8rem;
+        }
+
+        /* Floating Elements */
+        .floating-dot {
+            position: absolute;
+            width: 0.5rem;
+            height: 0.5rem;
+            background: #22c55e;
+            border-radius: 50%;
+        }
+
+        .dot-1 {
+            top: 25%;
+            left: 10%;
+            animation: ping 2s infinite;
+        }
+
+        .dot-2 {
+            top: 33%;
+            right: 20%;
+            animation: pulse 3s infinite;
+        }
+
+        .dot-3 {
+            bottom: 25%;
+            left: 25%;
+            animation: ping 2.5s infinite;
+        }
+
+        /* Animations */
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        @keyframes ping {
+            75%, 100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .contact-grid,
+            .tech-grid,
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+        }
+
+        /* Utility Classes */
+        .text-center { text-align: center; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-8 { margin-bottom: 2rem; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <!-- Cursor Effects -->
+    <div class="cursor-glow" id="cursorGlow"></div>
+    <div class="cursor-secondary" id="cursorSecondary"></div>
+    <div class="cursor-crosshair" id="cursorCrosshair"></div>
+
+    <!-- Grid Background -->
+    <div class="grid-background"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <div class="logo-icon">⚡</div>
+                <span>DEV.MATRIX</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">HOME</a></li>
+                <li><a href="#terminal">TERMINAL</a></li>
+                <li><a href="#stack">STACK</a></li>
+                <li><a href="#projects">PROJECTS</a></li>
+                <li><a href="#contact">CONTACT</a></li>
+            </ul>
+            <div class="status">
+                <div class="status-indicator">
+                    <span>📡</span>
+                    <span>ONLINE</span>
+                </div>
+                <div id="currentTime"></div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="boot-messages">
+                    <div>[SYSTEM BOOT] Initializing developer profile...</div>
+                    <div>[OK] Loading neural networks...</div>
+                    <div>[OK] Establishing connection to the matrix...</div>
+                </div>
+
+                <h1 class="hero-title">
+                    <span style="color: white;">ALEX</span><span>.CHEN</span>
+                </h1>
+
+                <div class="hero-subtitle">
+                    <span style="color: #22c55e;">&gt; </span>
+                    <span style="color: white;" id="typedText"></span>
+                    <span class="typing-cursor" style="color: #22c55e;">|</span>
+                </div>
+
+                <p class="hero-description">
+                    Crafting digital experiences through code. Specializing in modern web technologies, system architecture, and creating solutions that push the boundaries of what's possible.
+                </p>
+
+                <div class="hero-buttons">
+                    <a href="#" class="btn btn-primary">
+                        <span>📥</span>
+                        <span>DOWNLOAD_CV.ZIP</span>
+                    </a>
+                    <a href="#projects" class="btn btn-secondary">
+                        <span>▶</span>
+                        <span>VIEW_PROJECTS</span>
+                    </a>
+                </div>
+
+                <div class="social-links">
+                    <a href="#" class="social-link">
+                        <div class="social-icon">🔗</div>
+                        <span>GITHUB</span>
+                    </a>
+                    <a href="#" class="social-link">
+                        <div class="social-icon">💼</div>
+                        <span>LINKEDIN</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Elements -->
+        <div class="floating-dot dot-1"></div>
+        <div class="floating-dot dot-2"></div>
+        <div class="floating-dot dot-3"></div>
+    </section>
+
+    <!-- Terminal Section -->
+    <section id="terminal" class="terminal-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>&gt; SYSTEM_TERMINAL.EXE</h2>
+                <p>Interactive developer console</p>
+            </div>
+
+            <div class="terminal">
+                <div class="terminal-header">
+                    <div class="terminal-controls">
+                        <div class="terminal-control control-red"></div>
+                        <div class="terminal-control control-yellow"></div>
+                        <div class="terminal-control control-green"></div>
+                    </div>
+                    <div class="terminal-title">terminal@matrix:~</div>
+                    <div></div>
+                </div>
+                <div class="terminal-content" id="terminalContent">
+                    <!-- Terminal content will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack Section -->
+    <section id="stack" class="tech-stack">
+        <div class="container">
+            <div class="section-title">
+                <h2>&gt; TECH_STACK.JSON</h2>
+                <p>Current technology proficiency levels</p>
+            </div>
+
+            <div class="tech-grid">
+                <div class="tech-category">
+                    <h3>[FRONTEND]</h3>
+                    <div class="tech-item">
+                        <span class="tech-name">React</span>
+                        <span class="tech-level">95%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" data-width="95"></div>
+                    </div>
+
+                    <div class="tech-item">
+                        <span class="tech-name">Next.js</span>
+                        <span class="tech-level">90%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" data-width="90"></div>
+                    </div>
+
+                    <div class="tech-item">
+                        <span class="tech-name">TypeScript</span>
+                        <span class="tech-level">88%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" data-width="88"></div>
+                    </div>
+
+                    <div class="tech-item">
+                        <span class="tech-name">Tailwind</span>
+                        <span class="tech-level">92%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" data-width="92"></div>
+                    </div>
+                </div>
+
+                <div class="tech-category">
+                    <h3>[BACKEND]</h3>
+                    <div class="tech-item">
+                        <span class="tech-name">Node.js</span>
+                        <span class="tech-level">85%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" data-width="85"></div>
+                    </div>
+
+                    <div class="tech-item">
+                        <span class="tech-name">Python</span>
+                        <span class="tech-level">80%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" data-width="80"></div>
+                    </div>
+
+                    <div class="tech-item">
+                        <span class="tech-name">PostgreSQL</span>
+                        <span class="tech-level">82%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" data-width="82"></div>
+                    </div>
+
+                    <div class="tech-item">
+                        <span class="tech-name">MongoDB</span>
+                        <span class="tech-level">78%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" data-width="78"></div>
+                    </div>
+                </div>
+
+                <div class="tech-category">
+                    <h3>[DEVOPS]</h3>
+                    <div class="tech-item">
+                        <span class="tech-name">Docker</span>
+                        <span class="tech-level">75%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" data-width="75"></div>
+                    </div>
+
+                    <div class="tech-item">
+                        <span class="tech-name">AWS</span>
+                        <span class="tech-level">70%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" data-width="70"></div>
+                    </div>
+
+                    <div class="tech-item">
+                        <span class="tech-name">Kubernetes</span>
+                        <span class="tech-level">65%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" data-width="65"></div>
+                    </div>
+
+                    <div class="tech-item">
+                        <span class="tech-name">CI/CD</span>
+                        <span class="tech-level">80%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" data-width="80"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <div class="section-title">
+                <h2>&gt; PROJECT_ARCHIVE.DB</h2>
+                <p>Recent development projects and experiments</p>
+            </div>
+
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title">NEURAL_COMMERCE</h3>
+                        <span class="project-status">DEPLOYED</span>
+                    </div>
+                    <p class="project-description">
+                        AI-powered e-commerce platform with real-time inventory management and predictive analytics
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Next.js</span>
+                        <span class="tech-tag">TensorFlow</span>
+                        <span class="tech-tag">PostgreSQL</span>
+                        <span class="tech-tag">Redis</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" class="project-link">🔗</a>
+                        <a href="#" class="project-link">📱</a>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title">BLOCKCHAIN_WALLET</h3>
+                        <span class="project-status">BETA</span>
+                    </div>
+                    <p class="project-description">
+                        Secure cryptocurrency wallet with multi-chain support and DeFi integration
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-tag">React</span>
+                        <span class="tech-tag">Web3.js</span>
+                        <span class="tech-tag">Solidity</span>
+                        <span class="tech-tag">IPFS</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" class="project-link">🔗</a>
+                        <a href="#" class="project-link">📱</a>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title">QUANTUM_CHAT</h3>
+                        <span class="project-status">DEVELOPMENT</span>
+                    </div>
+                    <p class="project-description">
+                        End-to-end encrypted messaging platform with quantum-resistant cryptography
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Vue.js</span>
+                        <span class="tech-tag">WebRTC</span>
+                        <span class="tech-tag">Node.js</span>
+                        <span class="tech-tag">MongoDB</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" class="project-link">🔗</a>
+                        <a href="#" class="project-link">📱</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-title">
+                <h2>&gt; ESTABLISH_CONNECTION.EXE</h2>
+                <p>Initialize secure communication channel</p>
+            </div>
+
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <h3 class="mb-4">[CONTACT_PROTOCOLS]</h3>
+                    <div class="mb-8">
+                        <div class="mb-4">📧 alex.chen@matrix.dev</div>
+                        <div class="mb-4">💬 Secure messaging available</div>
+                        <div class="mb-4">🌍 Timezone: UTC-5</div>
+                    </div>
+                    <div style="font-size: 0.75rem; color: rgba(34, 197, 94, 0.6);">
+                        <div>[INFO] Encryption: AES-256</div>
+                        <div>[INFO] Response time: &lt; 24 hours</div>
+                        <div>[STATUS] Available for new projects</div>
+                    </div>
+                </div>
+
+                <div class="contact-form">
+                    <h3 class="mb-4">[MESSAGE_INTERFACE]</h3>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label class="form-label">USER_NAME:</label>
+                            <input type="text" class="form-input" placeholder="Enter your name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">EMAIL_ADDRESS:</label>
+                            <input type="email" class="form-input" placeholder="your.email@domain.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">MESSAGE_CONTENT:</label>
+                            <textarea class="form-textarea" placeholder="Enter your message..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            <span>📤</span>
+                            <span>SEND_MESSAGE</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Cursor following effect
+        let mouseX = 0, mouseY = 0;
+        let cursorGlow = document.getElementById('cursorGlow');
+        let cursorSecondary = document.getElementById('cursorSecondary');
+        let cursorCrosshair = document.getElementById('cursorCrosshair');
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            cursorGlow.style.left = mouseX + 'px';
+            cursorGlow.style.top = mouseY + 'px';
+            
+            cursorSecondary.style.left = mouseX + 'px';
+            cursorSecondary.style.top = mouseY + 'px';
+            
+            cursorCrosshair.style.left = mouseX + 'px';
+            cursorCrosshair.style.top = mouseY + 'px';
+        });
+
+        // Update time
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { hour12: false });
+            document.getElementById('currentTime').textContent = timeString;
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        // Typing effect
+        const fullText = "FULL_STACK_DEVELOPER.EXE";
+        let typedText = "";
+        let index = 0;
+
+        function typeText() {
+            if (index <= fullText.length) {
+                typedText = fullText.slice(0, index);
+                document.getElementById('typedText').textContent = typedText;
+                index++;
+                setTimeout(typeText, 100);
+            }
+        }
+        typeText();
+
+        // Terminal animation
+        const terminalLines = [
+            "$ whoami",
+            "alex.chen@matrix:~$ Full Stack Developer",
+            "",
+            "$ cat skills.txt",
+            "JavaScript, TypeScript, React, Next.js",
+            "Node.js, Python, PostgreSQL, MongoDB",
+            "AWS, Docker, Kubernetes, CI/CD",
+            "",
+            "$ ls -la projects/",
+            "drwxr-xr-x  5 alex  staff   160 Dec 15 10:30 neural-commerce",
+            "drwxr-xr-x  3 alex  staff    96 Dec 14 14:22 blockchain-wallet",
+            "drwxr-xr-x  4 alex  staff   128 Dec 13 09:15 quantum-chat",
+            "",
+            "$ echo 'Ready to build the future'",
+            "Ready to build the future",
+            "",
+            "$ _"
+        ];
+
+        let terminalIndex = 0;
+        const terminalContent = document.getElementById('terminalContent');
+
+        function addTerminalLine() {
+            if (terminalIndex < terminalLines.length) {
+                const line = document.createElement('div');
+                line.className = 'terminal-line';
+                line.textContent = terminalLines[terminalIndex];
+                terminalContent.appendChild(line);
+                terminalIndex++;
+                setTimeout(addTerminalLine, 500);
+            }
+        }
+
+        // Start terminal animation when section is visible
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && entry.target.id === 'terminal') {
+                    addTerminalLine();
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+
+        observer.observe(document.getElementById('terminal'));
+
+        // Progress bar animation
+        const progressObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const progressBars = entry.target.querySelectorAll('.progress-fill');
+                    progressBars.forEach(bar => {
+                        const width = bar.getAttribute('data-width');
+                        setTimeout(() => {
+                            bar.style.width = width + '%';
+                        }, 200);
+                    });
+                    progressObserver.unobserve(entry.target);
+                }
+            });
+        });
+
+        document.querySelectorAll('.tech-category').forEach(category => {
+            progressObserver.observe(category);
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Form submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const button = this.querySelector('button[type="submit"]');
+            const originalText = button.innerHTML;
+            
+            button.innerHTML = '<span>⏳</span><span>TRANSMITTING...</span>';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                button.innerHTML = '<span>✅</span><span>MESSAGE_SENT</span>';
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                    this.reset();
+                }, 2000);
+            }, 2000);
+        });
+
+        // Add hover effects to interactive elements
+        document.querySelectorAll('.btn, .project-card, .tech-category, .social-link').forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                cursorGlow.style.transform = 'translate(-50%, -50%) scale(1.2)';
+                cursorGlow.style.opacity = '0.8';
+            });
+            
+            element.addEventListener('mouseleave', () => {
+                cursorGlow.style.transform = 'translate(-50%, -50%) scale(1)';
+                cursorGlow.style.opacity = '1';
+            });
+        });
+    </script>
+</body>
+</html>
